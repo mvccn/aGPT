@@ -7,13 +7,33 @@
     Example: 
     g=aGPT()
     g.ask("tell me somthing")
-    g.ask("a quick question...", fresh=True) #clear past conversation
-    g.ask("how to use F.CrossEntropy?", style="coder")
-    
-    It is more convenient to use this in a jupyter notebook, it can improve your work flow dramatically. 
-    Checkout test_aGPT.ipynb for more comprehensive examples. 
-    
     Note: 
     you need to get your own openai key and put it in key.py file like this: 
     import openai
     openai.api_key = "you key"
+    It is more convenient to use this in a jupyter notebook, it can improve your work flow dramatically. 
+    Checkout test_aGPT.ipynb for more comprehensive examples. 
+
+## Coversational
+![alt text](https://github.com/mvccn/aGPT/blob/main/images/conversation.png?raw=true)
+
+## Styles:
+These are really prompt templates created for different needs. You can easily define your own style.
+
+### Coder Style(with your default language)
+
+this will embed your default language tag in your prompt. The default is python 3, but you can change it:
+g.default_language="javascript" etc.
+
+![alt text](https://github.com/mvccn/aGPT/blob/main/images/coder.png?raw=true)
+
+## Explain Style
+
+![alt text](https://github.com/mvccn/aGPT/blob/main/images/explain.png?raw=true)
+
+ ## Debug Style
+
+ ![alt text](https://github.com/mvccn/aGPT/blob/main/images/debug.png?raw=true)
+
+ 
+
