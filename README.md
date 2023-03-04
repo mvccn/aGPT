@@ -27,11 +27,11 @@ g.default_language="javascript" etc.
 
 ![alt text](https://github.com/mvccn/aGPT/blob/main/images/coder.png?raw=true)
 
-## Explain Style
+### Explain Style
 
 ![alt text](https://github.com/mvccn/aGPT/blob/main/images/explain.png?raw=true)
 
- ## Debug Style
+### Debug Style
 
  ![alt text](https://github.com/mvccn/aGPT/blob/main/images/debug.png?raw=true)
 
