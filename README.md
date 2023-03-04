@@ -10,7 +10,8 @@
     g.ask("a quick question...", fresh=True) #clear past conversation
     g.ask("how to use F.CrossEntropy?", style="coder")
     
-    it is more convenient to use this in a jupyter notebook, it can improve your work flow dramatically. Checkout test_aGPT.ipynb for more comprehensive examples. 
+    It is more convenient to use this in a jupyter notebook, it can improve your work flow dramatically. 
+    Checkout test_aGPT.ipynb for more comprehensive examples. 
     
     Note: 
     you need to get your own openai key and put it in key.py file like this: 
