@@ -1,5 +1,10 @@
 import openai
 from key import *
+import typer
+import os
+import yaml
+from pathlib import Path
+from rich import print
 
 class aGPT:
     """
@@ -24,23 +29,52 @@ class aGPT:
                  model= "gpt-3.5-turbo", #"text-davinci-003"
                  conversational=True, # keep this true to keep conversation 
                  ):
-        self.conversations = []
         self.system_message = f"You are a {needs} assistant."
         #self.system_message = "You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible. Knowledge cutoff: {knowledge_cutoff} Current date: {current_date}"
         self.conversational = conversational
         self.model = model
         self.default_language = "Python3"
+        self._conversations = [] #prompt, response pairs
+        self._conv_file = "/tmp/.gpt_conversation.yaml"
+        
+    @property
+    def conversations(self):
+        #check if there is conversation in self
+        if self._conversations == []: 
+            #check if there is conversation in file
+            if Path(self._conv_file).exists():
+                with open(self._conv_file, 'r') as stream:
+                    self._conversations = yaml.load(stream, Loader=yaml.FullLoader)
+            
+            #check if there is conversation in environment variable
+            # if "gpt_CONVERSATION" in os.environ:
+            #     #load conversation from environment variable
+            #     conversations_yaml = os.environ["gpt_CONVERSATION"]
+            #     self._conversations = yaml.load(conversations_yaml, Loader=yaml.FullLoader)
+            
+        return self._conversations
+    
+    @conversations.setter
+    def conversations(self, value):
+        self._conversations = value
+        #save conversations_yaml to conv_file, cx
+        with open(Path(self._conv_file), 'w') as f:
+            yaml.dump(self._conversations,f)
+        
+    def append_conversation(self, prompt, response):
+       self._conversations.append((prompt, response))
+       self.conversations = self._conversations
 
-    def ask(self, prompt, fresh=False, style=None):
-        if fresh: 
-            self.clear()
+    def ask(self, prompt, reset=False, style=None):
+        if reset: 
+            self.reset()
         prompt = self.create_prompt(prompt, style)
         self.messages =  self._conv_messages() if self.conversational else [] 
         self.messages.append({"role": "user", "content": prompt})
         self.completion=self._complete(prompt)
         response = self.completion['choices'][0]['message']['content']
-        self.conversations.append((prompt, response))
-        print(response)
+        self.append_conversation(prompt, response) 
+        print(f"[green]{response}[/green] :smiley:")
         
     def _complete(self, prompt):
         """
@@ -75,7 +109,7 @@ class aGPT:
     def _parse_result(self, response):
         return response['choices'][0]['message']['content']
 
-    def clear(self):
+    def reset(self):
         self.conversations = []
     
     def debug(self):
@@ -91,5 +125,29 @@ class aGPT:
         elif style== 'coder': 
             prompt=f"#{self.default_language}  \n{prompt}" 
         return prompt
+    
+    def save_conversation_to_env(self):
+        """
+        save conversation to environment variable
+        """
+        import os
+        os.environ["CONVERSATION"] = str(self.conversations)
+    
+app=typer.Typer()
+@app.command()
+def main(
+    reset: bool=typer.Option(False, '--reset','-r', help="reset conversation",prompt=False),     
+    prompt: str=typer.Option(..., help="prompt to ask",prompt=True),
+         ):
+    g=aGPT()
+    if reset: 
+        g.reset()
+    g.ask(prompt)
+
+    
+if __name__ == "__main__":
+    #test environment variable
+    os.environ["gpt_CONVERSATION1"] = "test"
+    app() 
         
 

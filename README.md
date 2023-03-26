@@ -1,8 +1,9 @@
 # aGPT
-    A convenient chat gpt assistant:
+    A convenient way to call chatgpt in notebook and unix shell:
     1. keep conversation in record and maintain the context of the chat.
     2. switch between engines including the latest: "gpt-3.5-turbo", "text-davinci-003", ""code-davinci-002"
-    3. add customized prompt template as you wish. 
+    3. keep a template(style) for your chatgpt prompt, for exmaple as a coder in python, simply 
+    choose 'coder' style, you can also add customized prompt template as you wish. 
     
     Example: 
     g=aGPT()
@@ -13,6 +14,10 @@
     openai.api_key = "you key"
     It is more convenient to use this in a jupyter notebook, it can improve your work flow dramatically. 
     Checkout test_aGPT.ipynb for more comprehensive examples. 
+## update: 
+Support shell access, keep the conversation, support rich print out!
+Example:  
+![alt text](https://github.com/mvccn/aGPT/blob/main/images/shell.png?raw=true)
 
 ## Coversational
 ![alt text](https://github.com/mvccn/aGPT/blob/main/images/conversation.png?raw=true)
