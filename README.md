@@ -14,6 +14,15 @@
     openai.api_key = "you key"
     It is more convenient to use this in a jupyter notebook, it can improve your work flow dramatically. 
     Checkout test_aGPT.ipynb for more comprehensive examples. 
+    Install: 
+    git clone https://github.com/mvccn/aGPT.git
+    cd aGPT
+    pip install -e ./
+    python aGPT.py
+    #you can also do an alias for convenient access
+    in your .zshrc(or .bashrc)
+    alias agpt='python aGPT.py'
+    
 ## Update: use aGPT in unix shell 
 Support shell access and keep the conversation, support rich print out!
 ![alt text](https://github.com/mvccn/aGPT/blob/main/images/shell.png?raw=true)
