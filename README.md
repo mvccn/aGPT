@@ -5,7 +5,7 @@
     3. keep a template(style) for your chatgpt prompt, for exmaple as a coder in python, simply 
     choose 'coder' style, you can also add customized prompt template as you wish. 
     
-    Example: 
+#### Example: 
     g=aGPT()
     g.ask("tell me somthing")
     Note: 
@@ -14,7 +14,9 @@
     openai.api_key = "you key"
     It is more convenient to use this in a jupyter notebook, it can improve your work flow dramatically. 
     Checkout test_aGPT.ipynb for more comprehensive examples. 
-    Install: 
+    
+#### Installation:
+    
     git clone https://github.com/mvccn/aGPT.git
     cd aGPT
     pip install -e ./
