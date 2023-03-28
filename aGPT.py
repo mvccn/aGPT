@@ -1,4 +1,5 @@
 import openai
+import signal
 from key import *
 import typer
 import os
@@ -36,6 +37,8 @@ class aGPT:
         self.default_language = "Python3"
         self._conversations = [] #prompt, response pairs
         self._conv_file = "/tmp/.gpt_conversation.yaml"
+        self._conv_dir = "~/.gpt_conversation/"
+        Path(self._conv_dir).mkdir(parents=True, exist_ok=True)
         
     @property
     def conversations(self):
@@ -64,6 +67,15 @@ class aGPT:
     def append_conversation(self, prompt, response):
        self._conversations.append((prompt, response))
        self.conversations = self._conversations
+       
+    #save conversation to a file
+    def save_conversation(self):
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename=Path(self._conv_dir, f"convs_{timestamp}.yaml")
+        with open(Path(self._conv_dir, filename), 'w') as f:
+            yaml.dump(self._conversations,f)
+    
 
     def ask(self, prompt, reset=False, style=None):
         if reset: 
@@ -140,14 +152,22 @@ def main(
     prompt: str=typer.Option(..., help="prompt to ask",prompt=True),
          ):
     g=aGPT()
+    
+    def handle_sigint(sig, frame):
+        print("save conversation!")
+        g.save_conversation()
+        
+    signal.signal(signal.SIGINT, handle_sigint)
     if reset: 
         g.reset()
     g.ask(prompt)
-
+    save=input("save this? [y/n]")
+    if save == "y":
+        g.save_conversation()
+    
     
 if __name__ == "__main__":
-    #test environment variable
-    os.environ["gpt_CONVERSATION1"] = "test"
+    # Register the signal handler
     app() 
         
 
