@@ -4,6 +4,7 @@
     2. switch between engines including the latest: "gpt-3.5-turbo", "text-davinci-003", ""code-davinci-002"
     3. keep a template(style) for your chatgpt prompt, for exmaple as a coder in python, simply 
     choose 'coder' style, you can also add customized prompt template as you wish. 
+
     
 #### Example: 
     g=aGPT()
@@ -24,8 +25,10 @@
     #you can also do an alias for convenient access
     in your .zshrc(or .bashrc)
     alias agpt='python aGPT.py'
-    
-## Update: use aGPT in unix shell 
+
+#### Update: Use editor(vim) to take large input text in unix shell
+python aGPT.py -l  will start a vim editor to edit input prompt.
+#### Update: use aGPT in unix shell 
 Support shell access and keep the conversation, support rich print out!
 ![alt text](https://github.com/mvccn/aGPT/blob/main/images/shell.png?raw=true)
 

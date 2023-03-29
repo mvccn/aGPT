@@ -2,10 +2,11 @@ import openai
 import signal
 from key import *
 import typer
-import os
 import yaml
 from pathlib import Path
 from rich import print
+import subprocess
+import tempfile
 
 class aGPT:
     """
@@ -73,8 +74,8 @@ class aGPT:
         from datetime import datetime
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename=Path(self._conv_dir, f"convs_{timestamp}.yaml")
-        with open(Path(self._conv_dir, filename), 'w') as f:
-            yaml.dump(self._conversations,f)
+        # with open(Path(self._conv_dir, filename), 'w') as f:
+        yaml.dump(self._conversations,filename)
     
 
     def ask(self, prompt, reset=False, style=None):
@@ -149,7 +150,9 @@ app=typer.Typer()
 @app.command()
 def main(
     reset: bool=typer.Option(False, '--reset','-r', help="reset conversation",prompt=False),     
-    prompt: str=typer.Option(..., help="prompt to ask",prompt=True),
+    save: bool=typer.Option(False, '--save','-s', help="save conversation",prompt=False),     
+    large_input: bool=typer.Option(False, '--large_input','-l', help="use vi to take large input ",prompt=False),     
+    #prompt: str=typer.Option(..., help="prompt to ask",prompt=True),
          ):
     g=aGPT()
     
@@ -160,11 +163,19 @@ def main(
     signal.signal(signal.SIGINT, handle_sigint)
     if reset: 
         g.reset()
+    if large_input:
+        temp_file = tempfile.NamedTemporaryFile(delete=True)
+        subprocess.run(["vim", temp_file.name])
+        with open(temp_file.name, "r") as f:
+            prompt = f.read()
+        temp_file.close()
+    else:
+        prompt=input("prompt: ")
     g.ask(prompt)
-    save=input("save this? [y/n]")
-    if save == "y":
-        g.save_conversation()
-    
+    if save:
+        save=input("save this? [y/N]")
+        if save == "y":
+            g.save_conversation()
     
 if __name__ == "__main__":
     # Register the signal handler
