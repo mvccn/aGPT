@@ -30,6 +30,7 @@ class aGPT:
                  needs="helpful and concise", #message to set context for gpt 3.5 turbo
                  model= "gpt-3.5-turbo", #"text-davinci-003"
                  conversational=True, # keep this true to keep conversation 
+                 stream=True, #stream the output 
                  ):
         self.system_message = f"You are a {needs} assistant."
         #self.system_message = "You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible. Knowledge cutoff: {knowledge_cutoff} Current date: {current_date}"
@@ -38,7 +39,9 @@ class aGPT:
         self.default_language = "Python3"
         self._conversations = [] #prompt, response pairs
         self._conv_file = "/tmp/.gpt_conversation.yaml"
-        self._conv_dir = "~/.gpt_conversation/"
+        self._conv_dir = Path("~/.gpt_conversation/")
+        self.stream=stream
+        
         Path(self._conv_dir).mkdir(parents=True, exist_ok=True)
         
     @property
@@ -49,12 +52,6 @@ class aGPT:
             if Path(self._conv_file).exists():
                 with open(self._conv_file, 'r') as stream:
                     self._conversations = yaml.load(stream, Loader=yaml.FullLoader)
-            
-            #check if there is conversation in environment variable
-            # if "gpt_CONVERSATION" in os.environ:
-            #     #load conversation from environment variable
-            #     conversations_yaml = os.environ["gpt_CONVERSATION"]
-            #     self._conversations = yaml.load(conversations_yaml, Loader=yaml.FullLoader)
             
         return self._conversations
     
@@ -107,6 +104,7 @@ class aGPT:
             completion = openai.ChatCompletion.create(
                 model=self.model,
                 messages=self.messages,
+                stream=self.stream,
             )
         return completion
 
